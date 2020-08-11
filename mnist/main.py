@@ -93,6 +93,8 @@ def main():
                         help='how many batches to wait before logging training status')
     parser.add_argument('--save-model', action='store_true', default=False,
                         help='For Saving the current Model')
+    parser.add_argument('--input-dir', help="input data", default="../data")
+    parser.add_argument('--download', action='store_true', help="if download data set", default=True)
     args = parser.parse_args()
     use_cuda = not args.no_cuda and torch.cuda.is_available()
 
@@ -111,9 +113,9 @@ def main():
         transforms.ToTensor(),
         transforms.Normalize((0.1307,), (0.3081,))
         ])
-    dataset1 = datasets.MNIST('../data', train=True, download=True,
+    dataset1 = datasets.MNIST(args.input_dir, train=True, download=args.download,
                        transform=transform)
-    dataset2 = datasets.MNIST('../data', train=False,
+    dataset2 = datasets.MNIST(args.input_dir, train=False,
                        transform=transform)
     train_loader = torch.utils.data.DataLoader(dataset1,**kwargs)
     test_loader = torch.utils.data.DataLoader(dataset2, **kwargs)
