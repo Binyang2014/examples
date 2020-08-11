@@ -1,5 +1,6 @@
 from __future__ import print_function
 import argparse
+import os
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -93,8 +94,9 @@ def main():
                         help='how many batches to wait before logging training status')
     parser.add_argument('--save-model', action='store_true', default=False,
                         help='For Saving the current Model')
-    parser.add_argument('--input-dir', help="input data", default="../data")
-    parser.add_argument('--download', action='store_true', help="if download data set", default=True)
+    parser.add_argument('--input-dir', help='input data', default='../data')
+    parser.add_argument('--download', action='store_true', help='if download data set', default=True)
+    parser.add_argument('--output-dir', help='model output dir', default='.')
     args = parser.parse_args()
     use_cuda = not args.no_cuda and torch.cuda.is_available()
 
@@ -130,7 +132,7 @@ def main():
         scheduler.step()
 
     if args.save_model:
-        torch.save(model.state_dict(), "mnist_cnn.pt")
+        torch.save(model.state_dict(), os.path.join(args.output_dir, "mnist_cnn.pt"))
 
 
 if __name__ == '__main__':
